@@ -1,10 +1,13 @@
 FROM php:8.1-apache
 
-# Copy toàn bộ mã nguồn vào thư mục web của Apache
-COPY . /var/www/html/
-
-# Cài đặt extension PHP kết nối MySQL
+# Cài extension mysqli để PHP dùng MySQL
 RUN docker-php-ext-install mysqli
 
-# Cấp quyền thư mục cho Apache
+# Copy source vào thư mục web
+COPY . /var/www/html/
+
+# Set quyền đúng để Apache truy cập
 RUN chown -R www-data:www-data /var/www/html
+
+#  Phải expose cổng 80 để Railway nhận diện service
+EXPOSE 80
