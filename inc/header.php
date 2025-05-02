@@ -1,30 +1,32 @@
-<?php 
-    include 'lib/session.php';
-     Session::init();
- ?>
 <?php
-	include_once ('lib/database.php');
-	include_once ('helpers/format.php');
-	spl_autoload_register(function($className){include_once "classes/".$className.".php";});
+include_once 'lib/session.php';
+Session::init();
 
-	$db = new database();
-	$fm = new format();
-	$ct = new cart ();
-	$us = new user();
-	$cat =new category();
-	$product = new product();
-	$cs = new customer();
-	$dir = new direct();
-	
-?>
-<?php
-  header("Cache-Control: no-cache, must-revalidate");
-  header("Pragma: no-cache"); 
-  header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); 
-  header("Cache-Control: max-age=2592000");
-?>
+include_once 'lib/database.php';
+include_once 'helpers/format.php';
 
-<!DOCTYPE php>
+spl_autoload_register(function($className) {
+    include_once "classes/" . $className . ".php";
+});
+
+$db = new database();
+$fm = new format();
+$ct = new cart();
+$us = new user();
+$cat = new category();
+$product = new product();
+$cs = new customer();
+$dir = new direct();
+
+// Headers
+header("Cache-Control: no-cache, must-revalidate");
+header("Pragma: no-cache"); 
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); 
+header("Cache-Control: max-age=2592000");
+
+?> 
+
+<!DOCTYPE html>
 <head>
 <title>Shop DIY hue</title>
 <meta http-equiv="Content-Type" content="text/php; charset=utf-8" />
