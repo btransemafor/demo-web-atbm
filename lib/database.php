@@ -1,8 +1,7 @@
 <?php
 $filepath = realpath(dirname(__FILE__));
-include($filepath . '/../config/config.php'); ?>
+include($filepath . '/../config/config.php'); 
 
-<?php
 class Database extends PDO
 {
   public $host   = DB_HOST;
