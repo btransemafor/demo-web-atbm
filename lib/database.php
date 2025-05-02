@@ -9,6 +9,7 @@ class Database extends PDO
   public $user   = DB_USER;
   public $pass   = DB_PASS;
   public $dbname = DB_NAME;
+  public $port = DB_PORT; 
 
 
   public $link;
@@ -25,7 +26,8 @@ class Database extends PDO
       $this->host,
       $this->user,
       $this->pass,
-      $this->dbname
+      $this->dbname,
+      $this->port
     );
     if (!$this->link) {
       $this->error = "Connection fail" . $this->link->connect_error;
