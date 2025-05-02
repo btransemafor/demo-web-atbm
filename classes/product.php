@@ -108,7 +108,7 @@ class product
         return $result;
     }
 
-    public function getProductsByCateId($page = 1, $cateId, $total = 8)
+    public function getProductsByCateId($cateId, $page = 1, $total = 8)
     {
         if ($page <= 0) {
             $page = 1;
