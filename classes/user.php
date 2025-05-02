@@ -6,10 +6,8 @@ include_once($filepath . '/../lib/PHPMailer.php');
 include_once($filepath . '/../lib/SMTP.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
-?>
 
-<?php
-/**
+/*
  * 
  */
 class user
@@ -30,7 +28,6 @@ class user
 			Session::set('userId', $value['id']);
 			Session::set('role_id', $value['role_id']);
 			header("Location:index.php");
-			exit;
 		} else {
 			$alert = "Tên đăng nhập hoặc mật khẩu không đúng!";
 			return $alert;
