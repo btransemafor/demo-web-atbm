@@ -30,7 +30,7 @@ class user
 			Session::set('userId', $value['id']);
 			Session::set('role_id', $value['role_id']);
 			header("Location:index.php");
-			exit();
+			exit;
 		} else {
 			$alert = "Tên đăng nhập hoặc mật khẩu không đúng!";
 			return $alert;

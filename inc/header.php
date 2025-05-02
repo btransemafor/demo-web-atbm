@@ -1,6 +1,8 @@
 <?php
+ob_start(); //  Chặn output sớm gây lỗi header/session
+
 include_once 'lib/session.php';
-Session::init();
+Session::init();  //  GỌI SỚM NHẤT
 
 include_once 'lib/database.php';
 include_once 'helpers/format.php';
@@ -18,13 +20,12 @@ $product = new product();
 $cs = new customer();
 $dir = new direct();
 
-// Headers
+// Headers — vẫn ở đây OK, vì chưa có HTML
 header("Cache-Control: no-cache, must-revalidate");
 header("Pragma: no-cache"); 
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); 
 header("Cache-Control: max-age=2592000");
-
-?> 
+?>
 
 <!DOCTYPE html>
 <head>
