@@ -37,10 +37,10 @@ class user
 				header("Location: index.php");
 				exit();
 			} else {
-				return "Mật khẩu không đúng!";
+				return "Email Hoặc Mật khẩu không đúng!";
 			}
 		} else {
-			return "Email không tồn tại!";
+			return "Email Hoặc Mật khẩu không đúng !!!";
 		}
 	}
 
