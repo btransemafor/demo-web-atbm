@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include '../lib/session.php';
 include '../classes/categories.php';
 Session::checkSession('admin');
@@ -34,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 $categories = new categories();
 $list = $categories->getAllAdmin((isset($_GET['page']) ? $_GET['page'] : 1));
 $pageCount = $categories->getCountPaging();
+ob_end_flush(); 
 ?>
 
 <!DOCTYPE html>

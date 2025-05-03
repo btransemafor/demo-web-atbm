@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include_once '../lib/session.php';
 Session::checkSession('admin');
 $role_id = Session::get('role_id');
@@ -14,6 +15,7 @@ $orderDetails = new orderDetails();
 $result = $orderDetails->getOrderDetails($_GET['orderId']);
 $order = new order();
 $order_result = $order->getById($result[0]['orderId']);
+ob_end_flush();
 ?>
 
 <!DOCTYPE html>

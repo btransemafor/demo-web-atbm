@@ -17,6 +17,7 @@ if ($role_id == 1) {
 
 $category = new categories();
 $categoriesList = $category->getAll();
+ob_end_flush();
 ?>
 
 

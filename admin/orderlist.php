@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include_once '../lib/session.php';
 Session::checkSession('admin');
 $role_id = Session::get('role_id');
@@ -14,6 +15,7 @@ $processingOrderList = $order->getProcessingOrder();
 $processedOrderList = $order->getProcessedOrder();
 $deliveringOrderList = $order->getDeliveringOrder();
 $completeOrderList = $order->getCompleteOrder();
+ob_end_flush();
 ?>
 
 <!DOCTYPE html>

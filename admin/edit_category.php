@@ -13,6 +13,7 @@ if ($role_id == 1) {
 } else {
     header("Location:../index.php");
 }
+ob_end_flush();
 ?>
 
 
