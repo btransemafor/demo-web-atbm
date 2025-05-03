@@ -1,6 +1,6 @@
 <?php
+Session::init();
 include_once 'lib/session.php';
-Session::init(); 
 include_once 'classes/product.php';
 include_once 'classes/cart.php';
 
