@@ -18,21 +18,33 @@ class user
 		$this->db = new Database();
 	}
 
+
+
 	public function login($email, $password)
-	{
-		$query = "SELECT * FROM users WHERE email = '$email' AND password = '$password' LIMIT 1 ";
-		$result = $this->db->select($query);
-		if ($result) {
-			$value = $result->fetch_assoc();
-			Session::set('user', true);
-			Session::set('userId', $value['id']);
-			Session::set('role_id', $value['role_id']);
-			header("Location:index.php");
-		} else {
-			$alert = "Tên đăng nhập hoặc mật khẩu không đúng!";
-			return $alert;
-		}
-	}
+{
+    $stmt = $this->db->link->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result && $result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+
+        // So sánh mật khẩu gốc với mật khẩu đã mã hóa trong DB
+        if (password_verify($password, $user['password'])) {
+            Session::set('user', true);
+            Session::set('userId', $user['id']);
+            Session::set('role_id', $user['role_id']);
+            header("Location: index.php");
+            exit();
+        } else {
+            return "Mật khẩu không đúng!";
+        }
+    } else {
+        return "Email không tồn tại!";
+    }
+}
+
 
 	public function insert($data)
 	{
