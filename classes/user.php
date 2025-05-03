@@ -18,7 +18,7 @@ class user
 		$this->db = new Database();
 	}
 
-
+/*
 	public function login($email, $password)
 	{
 		$stmt = $this->db->link->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
@@ -41,6 +41,24 @@ class user
 			}
 		} else {
 			return "Email Hoặc Mật khẩu không đúng !!!";
+		}
+	}
+
+	*/ 
+
+	public function login($email, $password)
+	{
+		$query = "SELECT * FROM users WHERE email = '$email' AND password = '$password' LIMIT 1 ";
+		$result = $this->db->select($query);
+		if ($result) {
+			$value = $result->fetch_assoc();
+			Session::set('user', true);
+			Session::set('userId', $value['id']);
+			Session::set('role_id', $value['role_id']);
+			header("Location:index.php");
+		} else {
+			$alert = "Tên đăng nhập hoặc mật khẩu không đúng!";
+			return $alert;
 		}
 	}
 
