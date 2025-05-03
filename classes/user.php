@@ -110,7 +110,7 @@ public function insert($data)
 
             $mail->CharSet = "UTF-8";
             $mail->IsHTML(true);
-            $mail->SetFrom("8878b0002@smtp-brevo.com", "Instrument Store");
+            $mail->SetFrom("omgniceten@gmail.com", "Instrument Store");
             $mail->AddAddress($email, "Người nhận");
 
             $mail->Subject = "Xác nhận email tài khoản - Instruments Store";
