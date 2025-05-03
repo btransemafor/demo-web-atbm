@@ -29,7 +29,9 @@ $userInfo = $user->get();
 
 <body>
     <nav>
-        <label class="logo" id="logo">STORENOW</label>
+    <label class="logo">
+        <a href="index.php" style="text-decoration: none; color: inherit;">OMGNICE</a>
+    </label>
         <ul>
             <li><a href="index.php">Trang chủ</a></li>
             <li><a href="productList.php">Sản phẩm</a></li>

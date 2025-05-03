@@ -62,6 +62,21 @@ class user
 		}
 	}
 
+	public function getInfoById($userId)
+{
+	$query = "SELECT * FROM users WHERE id = ? LIMIT 1";
+	$stmt = $this->db->link->prepare($query);
+	$stmt->bind_param("i", $userId);
+	$stmt->execute();
+	$result = $stmt->get_result();
+
+	if ($result && $result->num_rows > 0) {
+		return $result->fetch_assoc();
+	}
+	return false;
+}
+
+
 	public function insert($data)
 	{
 		$fullName = $data['fullName'];

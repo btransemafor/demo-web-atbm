@@ -27,24 +27,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
-    <nav>
-        <label class="logo">STORENOW</label>
-        <ul>
-            <li><a href="index.php">Trang chủ</a></li>
-            <li><a href="productList.php">Sản phẩm</a></li>
-            <li><a href="register.php" id="signup">Đăng ký</a></li>
-            <li><a href="login.php" id="signin" class="active">Đăng nhập</a></li>
-            <li><a href="order.php" id="order">Đơn hàng</a></li>
-            <li>
-                <a href="checkout.php">
-                    <i class="fa fa-shopping-bag"></i>
-                    <span class="sumItem">
-                        0
-                    </span>
-                </a>
-            </li>
-        </ul>
-    </nav>
+<nav>
+    <label class="logo">
+        <a href="index.php" style="text-decoration: none; color: inherit;">STORENOW</a>
+    </label>
+    <ul>
+        <li><a href="index.php">Trang chủ</a></li>
+        <li><a href="productList.php">Sản phẩm</a></li>
+        <li><a href="register.php" id="signup">Đăng ký</a></li>
+        <li><a href="login.php" id="signin" class="active">Đăng nhập</a></li>
+        <li><a href="order.php" id="order">Đơn hàng</a></li>
+        <li><a href="info.php" id="info">Thông tin</a></li> 
+        <li>
+            <a href="checkout.php">
+                <i class="fa fa-shopping-bag"></i>
+                <span class="sumItem">
+                    0
+                </span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
     <section class="banner"></section>
     <div class="featuredProducts">
         <h1>Đăng nhập</h1>

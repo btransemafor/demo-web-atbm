@@ -26,7 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <nav>
-        <label class="logo">STORENOW</label>
+    <label class="logo">
+        <a href="index.php" style="text-decoration: none; color: inherit;">STORENOW</a>
+    </label>
         <ul>
             <li><a href="index.php">Trang chủ</a></li>
             <li><a href="productList.php">Sản phẩm</a></li>
