@@ -77,55 +77,57 @@ class user
 	return false;
 }
 
+public function insert($data)
+{
+    $fullName = $data['fullName'];
+    $email = $data['email'];
+    $dob = $data['dob'];
+    $address = $data['address'];
+    $password = md5($data['password']);
 
-	public function insert($data)
-	{
-		$fullName = $data['fullName'];
-		$email = $data['email'];
-		$dob = $data['dob'];
-		$address = $data['address'];
-		$password = md5($data['password']);
+    $check_email = "SELECT * FROM users WHERE email='$email' LIMIT 1";
+    $result_check = $this->db->select($check_email);
 
+    if ($result_check) {
+        return 'Email đã tồn tại!';
+    } else {
+        // Genarate captcha
+        $captcha = rand(10000, 99999);
 
-		$check_email = "SELECT * FROM users WHERE email='$email' LIMIT 1";
-		$result_check = $this->db->select($check_email);
-		if ($result_check) {
-			return 'Email đã tồn tại!';
-		} else {
-			// Genarate captcha
-			$captcha = rand(10000, 99999);
+        $query = "INSERT INTO users VALUES (NULL,'$email','$fullName','$dob','$password',2,1,'$address',0,'$captcha')";
+        $result = $this->db->insert($query);
 
-			$query = "INSERT INTO users VALUES (NULL,'$email','$fullName','$dob','$password',2,1,'$address',0,'" . $captcha . "') ";
-			$result = $this->db->insert($query);
-			if ($result) {
-				// Send email
-				$mail = new PHPMailer();
-				$mail->IsSMTP();
-				$mail->Mailer = "smtp";
+        if ($result) {
+            // Gửi email xác minh bằng Brevo
+            $mail = new PHPMailer();
+            $mail->isSMTP();
+            $mail->SMTPAuth   = true;
+            $mail->Host       = "smtp-relay.brevo.com";
+            $mail->Username   = "8878b0002@smtp-brevo.com";
+            $mail->Password   = "SdWwncQJa6zrfjG3";
+            $mail->SMTPSecure = "tls";
+            $mail->Port       = 587;
 
-				$mail->SMTPDebug  = 0;
-				$mail->SMTPAuth   = TRUE;
-				$mail->SMTPSecure = "tls";
-				$mail->Port       = 587;
-				$mail->Host       = "smtp.gmail.com";
-				$mail->Username   = "khuongip564gb@gmail.com";
-				$mail->Password   = "googlekhuongip564gb";
+            $mail->CharSet = "UTF-8";
+            $mail->IsHTML(true);
+            $mail->SetFrom("8878b0002@smtp-brevo.com", "Instrument Store");
+            $mail->AddAddress($email, "Người nhận");
 
-				$mail->IsHTML(true);
-				$mail->CharSet = 'UTF-8';
-				$mail->AddAddress($email, "recipient-name");
-				$mail->SetFrom("khuongip564gb@gmail.com", "Instrument Store");
-				$mail->Subject = "Xác nhận email tài khoản - Instruments Store";
-				$mail->Body = "<h3>Cảm ơn bạn đã đăng ký tài khoản tại website InstrumentStore</h3></br>Đây là mã xác minh tài khoản của bạn: " . $captcha . "";
+            $mail->Subject = "Xác nhận email tài khoản - Instruments Store";
+            $mail->Body = "<h3>Cảm ơn bạn đã đăng ký tài khoản tại website InstrumentStore</h3><br>Đây là mã xác minh tài khoản của bạn: <strong>$captcha</strong>";
+            $mail->AltBody = "Cảm ơn bạn đã đăng ký tài khoản tại website InstrumentStore. Mã xác minh của bạn là: $captcha";
 
-				$mail->Send();
+            if (!$mail->Send()) {
+                return "Lỗi gửi email: " . $mail->ErrorInfo;
+            }
 
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
 
 	public function get()
 	{
