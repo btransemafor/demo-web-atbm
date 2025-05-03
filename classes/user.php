@@ -99,12 +99,12 @@ public function insert($data)
 
         if ($result) {
             // Gửi email xác minh bằng Brevo
-            $mail = new PHPMailer();
+			$mail = new PHPMailer();
             $mail->isSMTP();
-            $mail->SMTPAuth   = true;
-            $mail->Host       = "smtp-relay.brevo.com";
-            $mail->Username   = "8878b0002@smtp-brevo.com";
-            $mail->Password   = "SdWwncQJa6zrfjG3";
+            $mail->SMTPAuth = true;
+            $mail->Host = 'smtp.gmail.com';
+            $mail->Username   = "omgniceten@gmail.com";
+            $mail->Password   = "uhik jxta kghm rfou";
             $mail->SMTPSecure = "tls";
             $mail->Port       = 587;
 
