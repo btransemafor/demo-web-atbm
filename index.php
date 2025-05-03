@@ -40,7 +40,6 @@ $list = mysqli_fetch_all($product->getFeaturedProducts(), MYSQLI_ASSOC);
             <?php } else { ?>
                 <li><a href="register.php" id="signup">Đăng ký</a></li>
                 <li><a href="login.php" id="signin">Đăng nhập</a></li>
-
             <?php } ?>
 
             <li><a href="order.php" id="order">Đơn hàng</a></li>

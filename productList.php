@@ -40,6 +40,7 @@ $categoriesList = $categories->getAll();
             <?php
             if (isset($_SESSION['user']) && $_SESSION['user']) { ?>
                 <li><a href="logout.php" id="signin">Đăng xuất</a></li>
+                <li><a href="info.php" id="info">Thông tin</a></li> 
             <?php } else { ?>
                 <li><a href="register.php" id="signup">Đăng ký</a></li>
                 <li><a href="login.php" id="signin">Đăng nhập</a></li>

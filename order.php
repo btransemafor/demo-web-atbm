@@ -28,13 +28,16 @@ $result = $order->getOrderByUser();
 
 <body>
     <nav>
-        <label class="logo">STORENOW</label>
+    <label class="logo">
+        <a href="index.php" style="text-decoration: none; color: inherit;">STORENOW</a>
+    </label>
         <ul>
             <li><a href="index.php">Trang chủ</a></li>
             <li><a href="productList.php">Sản phẩm</a></li>
             <?php
             if (isset($_SESSION['user']) && $_SESSION['user']) { ?>
                 <li><a href="logout.php" id="signin">Đăng xuất</a></li>
+                <li><a href="info.php" id="info">Thông tin</a></li> 
             <?php } else { ?>
                 <li><a href="register.php" id="signup">Đăng ký</a></li>
                 <li><a href="login.php" id="signin">Đăng nhập</a></li>
