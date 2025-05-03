@@ -8,7 +8,7 @@ $cart = new cart();
 $totalQty = $cart->getTotalQtyByUserId();
 
 $product = new product();
-$list = $product->getProductsByCateId((isset($_GET['page']) ? $_GET['page'] : 1), (isset($_GET['cateId']) ? $_GET['cateId'] : 2));
+$list = $product->getProductsByCateId((isset($_GET['cateId']) ? $_GET['cateId'] : 2), (isset($_GET['page']) ? $_GET['page'] : 1));
 $pageCount = $product->getCountPagingClient((isset($_GET['cateId']) ? $_GET['cateId'] : 2));
 
 $categories = new categories();
