@@ -46,6 +46,8 @@ class user
 
 	*/ 
 
+
+	/*
 	public function login($email, $password)
 	{
 		$query = "SELECT * FROM users WHERE email = '$email' AND password = '$password' LIMIT 1 ";
@@ -62,6 +64,40 @@ class user
 			return $alert;
 		}
 	}
+	*/
+
+		public function login($email, $password)
+	{
+		// Sử dụng prepared statement để ngăn SQL Injection
+		$stmt = $this->db->link->prepare("SELECT * FROM users WHERE email = ? AND password = ? LIMIT 1");
+
+		if (!$stmt) {
+			// Trả lỗi nếu câu query sai cú pháp
+			die("SQL Error: " . $this->db->link->error);
+		}
+
+		// Gắn giá trị email và password vào câu query
+		$stmt->bind_param("ss", $email, $password);
+
+		// Thực thi truy vấn
+		$stmt->execute();
+
+		// Lấy kết quả trả về
+		$result = $stmt->get_result();
+
+		if ($result && $result->num_rows > 0) {
+			$value = $result->fetch_assoc();
+			Session::set('user', true);
+			Session::set('userId', $value['id']);
+			Session::set('role_id', $value['role_id']);
+			header("Location:index.php");
+			exit();
+		} else {
+			return "Tên đăng nhập hoặc mật khẩu không đúng!";
+		}
+	}
+
+
 
 	public function getInfoById($userId)
 {
@@ -76,6 +112,9 @@ class user
 	}
 	return false;
 }
+
+
+
 
 public function insert($data)
 {
