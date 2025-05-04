@@ -128,7 +128,7 @@ class user
 		$captcha = rand(10000, 99999);
 	
 		// Thêm người dùng mới
-		$query = "INSERT INTO users (email, fullName, dob, password, role_id, status, address, isVerify, captcha)
+		$query = "INSERT INTO users (email, fullName, dob, password, role_id, status, address, isConfirmed, captcha)
 				  VALUES (?, ?, ?, ?, 2, 1, ?, 0, ?)";
 		$stmt = $this->db->link->prepare($query);
 		if (!$stmt) {
