@@ -68,38 +68,39 @@ class user
 	
 
 	public function login($email, $password)
-{
-    // Truy vấn theo email trước
-    $stmt = $this->db->link->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
-    if (!$stmt) {
-        die("SQL Error: " . $this->db->link->error);
-    }
-
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result && $result->num_rows > 0) {
-        $user = $result->fetch_assoc();
-
-        // Debug: In ra mật khẩu đã hash để kiểm tra
-        // echo "Stored hash: " . $user['password'];
-        
-        // So sánh mật khẩu người dùng nhập với mật khẩu đã mã hóa trong DB
-        if (password_verify($password, $user['password'])) {
-            Session::set('user', true);
-            Session::set('userId', $user['id']);
-            Session::set('role_id', $user['role_id']);
-            header("Location: index.php");
-            exit();
-        } else {
-            return "Email hoặc mật khẩu không đúng!";
-        }
-    } else {
-        return "Email hoặc mật khẩu không đúng!";
-    }
-}
-
+	{
+		$stmt = $this->db->link->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
+		if (!$stmt) {
+			die("SQL Error: " . $this->db->link->error);
+		}
+	
+		$stmt->bind_param("s", $email);
+		$stmt->execute();
+		$result = $stmt->get_result();
+	
+		if ($result && $result->num_rows > 0) {
+			$user = $result->fetch_assoc();
+	
+			
+			echo "User input password: [$password]<br>";
+			echo "Hashed in DB: [{$user['password']}]<br>";
+			var_dump(password_verify($password, $user['password']));
+			exit;
+	
+			if (password_verify($password, $user['password'])) {
+				Session::set('user', true);
+				Session::set('userId', $user['id']);
+				Session::set('role_id', $user['role_id']);
+				header("Location: index.php");
+				exit();
+			} else {
+				return "Email hoặc mật khẩu không đúng!";
+			}
+		} else {
+			return "Email hoặc mật khẩu không đúng!";
+		}
+	}
+	
 public function insert($data)
 {
     $fullName = $data['fullName'];
