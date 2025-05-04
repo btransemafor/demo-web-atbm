@@ -66,9 +66,9 @@ class user
 	}
 	*/
 	
-
 	public function login($email, $password)
 	{
+		// Truy vấn thông tin user theo email
 		$stmt = $this->db->link->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
 		if (!$stmt) {
 			die("SQL Error: " . $this->db->link->error);
@@ -78,16 +78,13 @@ class user
 		$stmt->execute();
 		$result = $stmt->get_result();
 	
+		// Nếu tìm thấy user
 		if ($result && $result->num_rows > 0) {
 			$user = $result->fetch_assoc();
 	
-			
-			echo "User input password: [$password]<br>";
-			echo "Hashed in DB: [{$user['password']}]<br>";
-			var_dump(password_verify($password, $user['password']));
-			exit;
-	
+			// Dùng password_verify để so sánh mật khẩu gốc với chuỗi hash
 			if (password_verify($password, $user['password'])) {
+				// Nếu đúng, thiết lập session
 				Session::set('user', true);
 				Session::set('userId', $user['id']);
 				Session::set('role_id', $user['role_id']);
@@ -101,78 +98,75 @@ class user
 		}
 	}
 	
-public function insert($data)
-{
-    $fullName = $data['fullName'];
-    $email = $data['email'];
-    $dob = $data['dob'];
-    $address = $data['address'];
-    
-    // Sử dụng password_hash với PASSWORD_DEFAULT để mã hóa mật khẩu
-    $password = password_hash($data['password'], PASSWORD_DEFAULT);
-    
-    // Kiểm tra password đã được hash đúng chưa
-    if (!$password) {
-        return "Lỗi khi tạo mật khẩu!";
-    }
-
-    // Kiểm tra email đã tồn tại chưa
-    $stmt = $this->db->link->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
-    if (!$stmt) {
-        die("SQL Error: " . $this->db->link->error);
-    }
-    
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result && $result->num_rows > 0) {
-        return 'Email đã tồn tại!';
-    } else {
-        // Tạo mã captcha
-        $captcha = rand(10000, 99999);
-
-        // Sử dụng prepared statement để insert
-        $query = "INSERT INTO users VALUES (NULL, ?, ?, ?, ?, 2, 1, ?, 0, ?)";
-        $stmt = $this->db->link->prepare($query);
-        
-        if (!$stmt) {
-            die("SQL Error: " . $this->db->link->error);
-        }
-        
-        $stmt->bind_param("ssssss", $email, $fullName, $dob, $password, $address, $captcha);
-        $result = $stmt->execute();
-
-        if ($result) {
-            // Gửi email xác minh bằng PHPMailer
-            $mail = new PHPMailer();
-            $mail->isSMTP();
-            $mail->SMTPAuth = true;
-            $mail->Host = 'smtp.gmail.com';
-            $mail->Username = "omgniceten@gmail.com";
-            $mail->Password = "uhik jxta kghm rfou";
-            $mail->SMTPSecure = "tls";
-            $mail->Port = 587;
-
-            $mail->CharSet = "UTF-8";
-            $mail->IsHTML(true);
-            $mail->SetFrom("omgniceten@gmail.com", "Instrument Store");
-            $mail->AddAddress($email, "Người nhận");
-
-            $mail->Subject = "Xác nhận email tài khoản - Instruments Store";
-            $mail->Body = "<h3>Cảm ơn bạn đã đăng ký tài khoản tại website InstrumentStore</h3><br>Đây là mã xác minh tài khoản của bạn: <strong>$captcha</strong>";
-            $mail->AltBody = "Cảm ơn bạn đã đăng ký tài khoản tại website InstrumentStore. Mã xác minh của bạn là: $captcha";
-
-            if (!$mail->Send()) {
-                return "Lỗi gửi email: " . $mail->ErrorInfo;
-            }
-
-            return true;
-        } else {
-            return false;
-        }
-    }
-}
+	public function insert($data)
+	{
+		$fullName = $data['fullName'];
+		$email = $data['email'];
+		$dob = $data['dob'];
+		$address = $data['address'];
+		$passwordRaw = $data['password'];
+	
+		// Mã hóa mật khẩu
+		$password = password_hash($passwordRaw, PASSWORD_DEFAULT);
+		if (!$password) {
+			return "Lỗi khi mã hóa mật khẩu!";
+		}
+	
+		// Kiểm tra email đã tồn tại
+		$stmt = $this->db->link->prepare("SELECT id FROM users WHERE email = ? LIMIT 1");
+		if (!$stmt) {
+			die("SQL Error (check email): " . $this->db->link->error);
+		}
+		$stmt->bind_param("s", $email);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		if ($result && $result->num_rows > 0) {
+			return "Email đã tồn tại!";
+		}
+	
+		// Tạo mã captcha xác minh
+		$captcha = rand(10000, 99999);
+	
+		// Thêm người dùng mới
+		$query = "INSERT INTO users (email, fullName, dob, password, role_id, status, address, isVerify, captcha)
+				  VALUES (?, ?, ?, ?, 2, 1, ?, 0, ?)";
+		$stmt = $this->db->link->prepare($query);
+		if (!$stmt) {
+			die("SQL Error (insert user): " . $this->db->link->error);
+		}
+		$stmt->bind_param("ssssss", $email, $fullName, $dob, $password, $address, $captcha);
+		$success = $stmt->execute();
+	
+		if (!$success) {
+			return "Lỗi khi thêm tài khoản mới!";
+		}
+	
+		// Gửi email xác minh
+		$mail = new PHPMailer();
+		$mail->isSMTP();
+		$mail->SMTPAuth = true;
+		$mail->Host = 'smtp.gmail.com';
+		$mail->Username = "omgniceten@gmail.com";
+		$mail->Password = "uhik jxta kghm rfou";
+		$mail->SMTPSecure = "tls";
+		$mail->Port = 587;
+	
+		$mail->CharSet = "UTF-8";
+		$mail->isHTML(true);
+		$mail->setFrom("omgniceten@gmail.com", "Instrument Store");
+		$mail->addAddress($email, $fullName);
+	
+		$mail->Subject = "Xác nhận tài khoản - Instrument Store";
+		$mail->Body = "<h3>Cảm ơn bạn đã đăng ký!</h3><p>Mã xác minh tài khoản: <strong>$captcha</strong></p>";
+		$mail->AltBody = "Cảm ơn bạn đã đăng ký. Mã xác minh của bạn là: $captcha";
+	
+		if (!$mail->send()) {
+			return "Tạo tài khoản thành công, nhưng lỗi gửi email: " . $mail->ErrorInfo;
+		}
+	
+		return true;
+	}
+	
 
 public function getInfoById($userId)
 {
