@@ -89,7 +89,7 @@ class user
 				Session::set('userId', $user['id']);
 				Session::set('role_id', $user['role_id']);
 				header("Location: index.php");
-				exit();
+				
 			} else {
 				return "Email hoặc mật khẩu không đúng!";
 			}
