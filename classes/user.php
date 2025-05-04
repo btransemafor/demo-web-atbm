@@ -65,38 +65,36 @@ class user
 		}
 	}
 	*/
-
-		public function login($email, $password)
+	public function login($email, $password)
 	{
-		// Sử dụng prepared statement để ngăn SQL Injection
-		$stmt = $this->db->link->prepare("SELECT * FROM users WHERE email = ? AND password = ? LIMIT 1");
-
+		// Truy vấn theo email trước
+		$stmt = $this->db->link->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
 		if (!$stmt) {
-			// Trả lỗi nếu câu query sai cú pháp
 			die("SQL Error: " . $this->db->link->error);
 		}
-
-		// Gắn giá trị email và password vào câu query
-		$stmt->bind_param("ss", $email, $password);
-
-		// Thực thi truy vấn
+	
+		$stmt->bind_param("s", $email);
 		$stmt->execute();
-
-		// Lấy kết quả trả về
 		$result = $stmt->get_result();
-
+	
 		if ($result && $result->num_rows > 0) {
-			$value = $result->fetch_assoc();
-			Session::set('user', true);
-			Session::set('userId', $value['id']);
-			Session::set('role_id', $value['role_id']);
-			header("Location:index.php");
-			exit();
+			$user = $result->fetch_assoc();
+	
+			// So sánh mật khẩu người dùng nhập với mật khẩu đã mã hóa trong DB
+			if (password_verify($password, $user['password'])) {
+				Session::set('user', true);
+				Session::set('userId', $user['id']);
+				Session::set('role_id', $user['role_id']);
+				header("Location: index.php");
+				exit();
+			} else {
+				return "Email hoặc mật khẩu không đúng!";
+			}
 		} else {
-			return "Tên đăng nhập hoặc mật khẩu không đúng!";
+			return "Email hoặc mật khẩu không đúng!";
 		}
 	}
-
+	
 
 
 	public function getInfoById($userId)
