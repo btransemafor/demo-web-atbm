@@ -67,105 +67,104 @@ class user
 	*/
 	
 	public function login($email, $password)
-	{
-		// Truy vấn thông tin user theo email
-		$stmt = $this->db->link->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
-		if (!$stmt) {
-			die("SQL Error: " . $this->db->link->error);
-		}
-	
-		$stmt->bind_param("s", $email);
-		$stmt->execute();
-		$result = $stmt->get_result();
-	
-		// Nếu tìm thấy user
-		if ($result && $result->num_rows > 0) {
-			$user = $result->fetch_assoc();
-	
-			// Dùng password_verify để so sánh mật khẩu gốc với chuỗi hash
-			if (password_verify($password, $user['password'])) {
-				// Nếu đúng, thiết lập session
-				Session::set('user', true);
-				Session::set('userId', $user['id']);
-				Session::set('role_id', $user['role_id']);
-				header("Location: index.php");
-				
-			} else {
-				return "Email hoặc mật khẩu không đúng!";
-			}
-		} else {
-			return "Email hoặc mật khẩu không đúng!";
-		}
-	}
-	
-	public function insert($data)
-	{
-		$fullName = $data['fullName'];
-		$email = $data['email'];
-		$dob = $data['dob'];
-		$address = $data['address'];
-		$passwordRaw = $data['password'];
-	
-		// Mã hóa mật khẩu
-		$password = password_hash($passwordRaw, PASSWORD_DEFAULT);
-		if (!$password) {
-			return "Lỗi khi mã hóa mật khẩu!";
-		}
-	
-		// Kiểm tra email đã tồn tại
-		$stmt = $this->db->link->prepare("SELECT id FROM users WHERE email = ? LIMIT 1");
-		if (!$stmt) {
-			die("SQL Error (check email): " . $this->db->link->error);
-		}
-		$stmt->bind_param("s", $email);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		if ($result && $result->num_rows > 0) {
-			return "Email đã tồn tại!";
-		}
-	
-		// Tạo mã captcha xác minh
-		$captcha = rand(10000, 99999);
-	
-		// Thêm người dùng mới
-		$query = "INSERT INTO users (email, fullName, dob, password, role_id, status, address, isConfirmed, captcha)
-				  VALUES (?, ?, ?, ?, 2, 1, ?, 0, ?)";
-		$stmt = $this->db->link->prepare($query);
-		if (!$stmt) {
-			die("SQL Error (insert user): " . $this->db->link->error);
-		}
-		$stmt->bind_param("ssssss", $email, $fullName, $dob, $password, $address, $captcha);
-		$success = $stmt->execute();
-	
-		if (!$success) {
-			return "Lỗi khi thêm tài khoản mới!";
-		}
-	
-		// Gửi email xác minh
-		$mail = new PHPMailer();
-		$mail->isSMTP();
-		$mail->SMTPAuth = true;
-		$mail->Host = 'smtp.gmail.com';
-		$mail->Username = "omgniceten@gmail.com";
-		$mail->Password = "uhik jxta kghm rfou";
-		$mail->SMTPSecure = "tls";
-		$mail->Port = 587;
-	
-		$mail->CharSet = "UTF-8";
-		$mail->isHTML(true);
-		$mail->setFrom("omgniceten@gmail.com", "Instrument Store");
-		$mail->addAddress($email, $fullName);
-	
-		$mail->Subject = "Xác nhận tài khoản - Instrument Store";
-		$mail->Body = "<h3>Cảm ơn bạn đã đăng ký!</h3><p>Mã xác minh tài khoản: <strong>$captcha</strong></p>";
-		$mail->AltBody = "Cảm ơn bạn đã đăng ký. Mã xác minh của bạn là: $captcha";
-	
-		if (!$mail->send()) {
-			return "Tạo tài khoản thành công, nhưng lỗi gửi email: " . $mail->ErrorInfo;
-		}
-	
-		return true;
-	}
+{
+    // Truy vấn thông tin user theo email
+    $stmt = $this->db->link->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
+    if (!$stmt) {
+        die("SQL Error: " . $this->db->link->error);
+    }
+
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Nếu tìm thấy user
+    if ($result && $result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+
+        // Dùng password_verify để so sánh mật khẩu gốc với chuỗi hash
+        if (password_verify($password, $user['password'])) {
+            // Nếu đúng, thiết lập session
+            Session::set('user', true);
+            Session::set('userId', $user['id']);
+            Session::set('role_id', $user['role_id']);
+            header("Location: index.php");
+            exit(); // Thêm exit() để chắc chắn script dừng lại sau khi redirect
+        } else {
+            return "Email hoặc mật khẩu không đúng!";
+        }
+    } else {
+        return "Email hoặc mật khẩu không đúng!";
+    }
+}
+
+public function insert($data)
+{
+    $fullName = $data['fullName'];
+    $email = $data['email'];
+    $dob = $data['dob'];
+    $address = $data['address'];
+    $passwordRaw = $data['password'];
+
+    // Băm mật khẩu bằng bcrypt
+    $password = password_hash($passwordRaw, PASSWORD_DEFAULT);
+
+    if (!$password) {
+        return "Lỗi khi mã hóa mật khẩu!";
+    }
+
+    // Kiểm tra trùng email
+    $stmt = $this->db->link->prepare("SELECT id FROM users WHERE email = ? LIMIT 1");
+    if (!$stmt) {
+        die("SQL Error (check email): " . $this->db->link->error);
+    }
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result && $result->num_rows > 0) {
+        return "Email đã tồn tại!";
+    }
+
+    // Tạo mã captcha xác nhận email
+    $captcha = rand(10000, 99999);
+
+    // Thêm người dùng mới
+    $query = "INSERT INTO users (email, fullname, dob, password, role_id, status, address, isConfirmed, captcha)
+              VALUES (?, ?, ?, ?, 2, 1, ?, 0, ?)";
+    $stmt = $this->db->link->prepare($query);
+    $stmt->bind_param("ssssss", $email, $fullName, $dob, $password, $address, $captcha);
+    $success = $stmt->execute();
+
+    if (!$success) {
+        return "Lỗi khi thêm tài khoản!";
+    }
+
+    // Gửi email xác minh
+    $mail = new PHPMailer();
+    $mail->isSMTP();
+    $mail->SMTPAuth = true;
+    $mail->Host = 'smtp.gmail.com';
+    $mail->Username = "omgniceten@gmail.com";
+    $mail->Password = "uhik jxta kghm rfou";
+    $mail->SMTPSecure = "tls";
+    $mail->Port = 587;
+
+    $mail->CharSet = "UTF-8";
+    $mail->isHTML(true);
+    $mail->setFrom("omgniceten@gmail.com", "Instrument Store");
+    $mail->addAddress($email, $fullName);
+
+    $mail->Subject = "Xác nhận tài khoản - Instrument Store";
+    $mail->Body = "<h3>Mã xác minh tài khoản của bạn: <strong>$captcha</strong></h3>";
+
+    if (!$mail->send()) {
+        return "Tạo thành công, nhưng gửi email lỗi: " . $mail->ErrorInfo;
+    }
+
+    return true;
+}
+
 	
 
 public function getInfoById($userId)
