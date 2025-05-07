@@ -85,7 +85,7 @@ $categoriesList = $category->getAll();
     </div>
     </div>
     <footer>
-        <p class="copyright">STORENOW @ 2021</p>
+    <p class="copyright">OMGNICE@2025</p>
     </footer>
 </body>
 

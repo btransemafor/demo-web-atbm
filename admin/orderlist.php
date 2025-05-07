@@ -193,7 +193,7 @@ ob_end_flush();
     </div>
     
     <footer>
-        <p class="copyright">STORENOW @ 2021</p>
+    <p class="copyright">OMGNICE @ 2025</p>
     </footer>
 </body>
 <script type="text/javascript">

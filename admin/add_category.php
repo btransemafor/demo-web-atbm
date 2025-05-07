@@ -57,7 +57,7 @@ if ($role_id == 1) {
     </div>
     </div>
     <footer>
-        <p class="copyright">STORENOW @ 2021</p>
+        <p class="copyright">OMGNICE@2025</p>
     </footer>
 </body>
 

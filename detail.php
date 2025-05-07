@@ -94,7 +94,7 @@ if (!$result) {
                 <a href="productList.php">Sản Phẩm</a>
             </li>
         </ul>
-        <p class="copyright">STORENOW @ 2021</p>
+        <p class="copyright">OMGNICE @ 2025</p>
     </footer>
 </body>
 

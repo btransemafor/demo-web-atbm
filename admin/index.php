@@ -55,7 +55,7 @@ if ($role_id == 1) {
                 <a href="#">About</a>
             </li>
         </ul>
-        <p class="copyright">Khuong Nguyen @ 2021</p>
+        <p class="copyright">OMGNICE @ 2025</p>
     </footer>
 </body>
 
