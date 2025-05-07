@@ -18,8 +18,7 @@ class user
 		$this->db = new Database();
 	}
 
-
-	public function login($email, $password)
+ 	/* public function login($email, $password)
 	{
 		$query = "SELECT * FROM users WHERE email = '$email' AND password = '$password' LIMIT 1 ";
 		$result = $this->db->select($query);
@@ -34,18 +33,16 @@ class user
 			$alert = "Tên đăng nhập hoặc mật khẩu không đúng!";
 			return $alert;
 		}
-	}
-
-
-	
-
+	} */
+ 
 
 	/// ------------------ kỸ Thuật prepared Statement ---------------- ///
 
-	/*
+	
+	
 	public function login($email, $password)
 {
-    // Truy vấn thông tin user theo email
+   
     $stmt = $this->db->link->prepare("SELECT * FROM users WHERE email = ? LIMIT 1");
     if (!$stmt) {
         die("SQL Error: " . $this->db->link->error);
@@ -55,13 +52,13 @@ class user
     $stmt->execute();
     $result = $stmt->get_result();
 
-    // Nếu tìm thấy user
+   
     if ($result && $result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
-        // Dùng password_verify để so sánh mật khẩu gốc với chuỗi hash
+        // password_verify để so sánh mật khẩu gốc với chuỗi hash
         if (password_verify($password, $user['password'])) {
-            // Nếu đúng, thiết lập session
+           
             Session::set('user', true);
             Session::set('userId', $user['id']);
             Session::set('role_id', $user['role_id']);
@@ -76,7 +73,6 @@ class user
 }
 
 
-*/ 
 
 
 
