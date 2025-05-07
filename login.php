@@ -1,6 +1,6 @@
 <?php
 include_once 'lib/session.php';
-Session::init(); // Gọi sớm để đảm bảo session_start() chạy đúng chỗ
+Session::init(); 
 include_once 'lib/database.php';
 include_once 'classes/user.php';
 

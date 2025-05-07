@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include_once '../lib/session.php';
 Session::checkSession('admin');
 $role_id = Session::get('role_id');
