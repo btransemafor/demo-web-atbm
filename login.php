@@ -1,7 +1,7 @@
 <?php
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-error_reporting(E_ALL);
+/////ini_set('display_errors', 0);
+//ini_set('display_startup_errors', 0);
+//error_reporting(E_ALL);
 include_once 'lib/session.php';
 Session::init(); 
 include_once 'lib/database.php';
